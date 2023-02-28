@@ -1,4 +1,4 @@
-import marked from 'marked';
+import {marked} from '/node_modules/marked/lib/marked.esm.js';
 
 class IlMarkdown extends HTMLElement {
 
