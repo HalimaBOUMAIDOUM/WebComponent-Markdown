@@ -7,9 +7,17 @@ class IlMarkdown extends HTMLElement {
         //using the method attachShadow to attach a shadow dom tree to our element , mode : open to make the shadowroot accesible (in terms of encapsulation)
         this.attachShadow({mode: 'open'});
         this.shadowRoot.innerHTML=`
-        <style>/* a definir */</style>
+        <style>
+        #content {
+            border: red  solid;
+            background-color: #eeeeee;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px dotted black;
+          }</style>
         <div id="content"></div>`;
         // the div above will be used to display the Markdown content
+        console.log("test constructor")
         
     }
 
@@ -19,9 +27,11 @@ class IlMarkdown extends HTMLElement {
         const url = this.getAttribute('data-src');
         const markdown = await this.getMarkdown(url);
         const html = marked(markdown);
+      
+        console.log(html)
         this.shadowRoot.querySelector('#content').innerHTML = html
-        //test
-        console.log("hiiiiii");
+        
+        
     }
 
     async getMarkdown(url){
