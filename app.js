@@ -17,6 +17,8 @@ class IlMarkdown extends HTMLElement {
           }
          
           }</style>
+        <button id="downloadMarkdown">Télécharger Markdown</button>
+        <button id="downloadHTML">Télécharger HTML</button>
         <div id="content"></div>
         <button id="buttonTheme" > Changer le Theme </button>
         `;
@@ -36,33 +38,17 @@ class IlMarkdown extends HTMLElement {
 
         this.shadowRoot.querySelector('#buttonTheme').addEventListener('click', () => {this.changerTheme()});
 
-        const downloadBtn = `
-        <button id="download-html">Download HTML</button>
-        <button id="download-md">Download Markdown</button>
-    `;
-    this.shadowRoot.querySelector('#content').insertAdjacentHTML('beforebegin', downloadBtn);
+        ////////////////
+        this.shadowRoot.querySelector('#downloadMarkdown').addEventListener('click', () => {
+            this.downloadMarkdown();
+        });
+    
+        this.shadowRoot.querySelector('#downloadHTML').addEventListener('click', () => {
+            this.downloadHTML();
+        });
+   
 
-    const downloadHtmlBtn = this.shadowRoot.querySelector('#download-html');
-    const downloadMdBtn = this.shadowRoot.querySelector('#download-md');
-
-    downloadHtmlBtn.addEventListener('click', () => {
-        const html = marked(markdown);
-        const blob = new Blob([html], {type: 'text/html'});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'content.html';
-        link.click();
-    });
-
-    downloadMdBtn.addEventListener('click', () => {
-        const blob = new Blob([markdown], {type: 'text/markdown'});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'content.md';
-        link.click();
-    });
+        
     }
 
     async getMarkdown(url){
@@ -85,6 +71,35 @@ class IlMarkdown extends HTMLElement {
         }
         
 
+    }
+
+    //
+    downloadMarkdown() {
+        const url = this.getAttribute('data-src');
+        fetch(url)
+            .then(response => response.text())
+            .then(data => {
+                const filename = 'markdown.md';
+                const element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+                element.setAttribute('download', filename);
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);
+            });
+    }
+    
+    downloadHTML() {
+        const html = this.shadowRoot.querySelector('#content').innerHTML;
+        const filename = 'markdown.html';
+        const element = document.createElement('a');
+        element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(html));
+        element.setAttribute('download', filename);
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
     }
 }
 
