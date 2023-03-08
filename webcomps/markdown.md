@@ -26,3 +26,5 @@ Et voici une liste numérotée :
 
 > Ceci est une citation avec du **style**.
 
+Pour accéder à davantage de tutoriels, merci de visiter la page d'accueil du [Programming Historian](/ "Programming Historian main page").
+
