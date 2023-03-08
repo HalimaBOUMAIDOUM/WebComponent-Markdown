@@ -35,6 +35,34 @@ class IlMarkdown extends HTMLElement {
         this.shadowRoot.querySelector('#content').innerHTML = html
 
         this.shadowRoot.querySelector('#buttonTheme').addEventListener('click', () => {this.changerTheme()});
+
+        const downloadBtn = `
+        <button id="download-html">Download HTML</button>
+        <button id="download-md">Download Markdown</button>
+    `;
+    this.shadowRoot.querySelector('#content').insertAdjacentHTML('beforebegin', downloadBtn);
+
+    const downloadHtmlBtn = this.shadowRoot.querySelector('#download-html');
+    const downloadMdBtn = this.shadowRoot.querySelector('#download-md');
+
+    downloadHtmlBtn.addEventListener('click', () => {
+        const html = marked(markdown);
+        const blob = new Blob([html], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'content.html';
+        link.click();
+    });
+
+    downloadMdBtn.addEventListener('click', () => {
+        const blob = new Blob([markdown], {type: 'text/markdown'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'content.md';
+        link.click();
+    });
     }
 
     async getMarkdown(url){
